@@ -1,0 +1,18 @@
+# 可执行文件
+*.out
+main  # 假设 main 是可执行程序名
+
+# 目标文件
+*.o
+
+# 编译目录
+build/
+bin/
+
+# 临时文件、日志
+*~
+*.log
+
+# VS Code 配置
+.vscode/
+
