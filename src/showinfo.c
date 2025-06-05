@@ -15,6 +15,7 @@ void printgap()
 
 void printhead()
 {
+    //打印数据表头
     printf("%13s|%20s|%16s|%23s|%8s|%8s|%8s\n", head[0], head[1], head[2], head[3], head[4], head[5], head[6]);
 }
 
@@ -46,6 +47,7 @@ void showmenu()
 
 void printstu(struct student p)
 {
+    //打印单个学生的信息
     printf("%10s|%20s|%4d-%2d-%2d|%20s|%5.1f|%5.1f|%5.1f\n",
            p.no, p.name, p.birthday.year, p.birthday.month, p.birthday.day, p.id, p.chinese, p.math, p.english);
 }

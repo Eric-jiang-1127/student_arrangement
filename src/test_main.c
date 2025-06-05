@@ -8,8 +8,5 @@ int rcount = 2;
 
 int main()
 {
-    showmenu();
-    displayinfo();
-    addinfo();
-    displayinfo();
+    searchinfo();
 }

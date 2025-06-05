@@ -31,4 +31,6 @@ void deleteinfo();
 void sortinfo();
 void displayinfo();
 
+void printstu(struct student p);
+
 #endif
