@@ -10,4 +10,6 @@ int main()
 {
     showmenu();
     displayinfo();
+    addinfo();
+    displayinfo();
 }
