@@ -9,7 +9,7 @@ cmake ..
 make
 
 # 编译完成后自动运行
-if [ -f ./test_showmenu ]; then
+if [ -f ./studentarrangement ]; then
     echo "====== 运行结果 ======"
-    ./test_showmenu
+    ./studentarrangement
 fi
