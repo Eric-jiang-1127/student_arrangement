@@ -4,12 +4,16 @@
 mkdir -p build
 cd build
 
-# 运行cmake和make，自动编译test_main.c相关目标
+# 运行cmake和make
 cmake ..
 make
 
+cd ..
+# 确保data目录存在
+mkdir -p data
+
 # 编译完成后自动运行
-if [ -f ./studentarrangement ]; then
+if [ -f ./build/studentarrangement ]; then
     echo "====== 运行结果 ======"
-    ./studentarrangement
+    ./build/studentarrangement
 fi
