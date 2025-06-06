@@ -69,11 +69,12 @@ void addinfo()
     printf("成功添加%d条学生信息.\n", count);
 }
 
+/*原本的searchinfo函数
 void searchinfo()
 {
-    /*
+
     函数接口定义：
-    接收用户输入的一个编号xxx，如果数组studentinfo中存在该编号，则在新行输出该学生信息，输出格式如下：编号10，姓名20，出生日期YYYY-MM-DD，身份证20，成绩5位保留1位小数，如果不存在，在新行显示“无此人”。*/
+    接收用户输入的一个编号xxx，如果数组studentinfo中存在该编号，则在新行输出该学生信息，输出格式如下：编号10，姓名20，出生日期YYYY-MM-DD，身份证20，成绩5位保留1位小数，如果不存在，在新行显示“无此人”。
     printf("请输入要查询的编号:\n");
     char tempno[10];
     scanf("%s", tempno);
@@ -86,7 +87,8 @@ void searchinfo()
     {
         printf("无此人\n");
     }
-}
+    }
+*/
 
 void modifyinfo()
 {
@@ -123,7 +125,7 @@ void modifyinfo()
         printf("输入学生信息:编号 姓名 生日（年月日用空格分隔） 身份证 语文 数学 英语\n");
         struct student new;
         input_student(&new);
-        if (strcmp(tempno, new.no)!=0)
+        if (strcmp(tempno, new.no) != 0)
         {
             printf("编号不允许修改,修改失败.\n");
         }
@@ -160,9 +162,9 @@ void deleteinfo()
     }
     else
     {
-        for (int i = index; i < rcount-1; i++)
+        for (int i = index; i < rcount - 1; i++)
         {
-            studentinfo[i] = studentinfo[i+1];
+            studentinfo[i] = studentinfo[i + 1];
         }
         rcount--;
         printf("删除学生信息成功.\n");
