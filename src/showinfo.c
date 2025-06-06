@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include<wchar.h>
+#include<locale.h>
 #include "functions.h"
 
 int count = 83;
@@ -6,7 +8,7 @@ const char *head[] = {"编号", "姓名", "出生日期", "身份证", "语文",
 
 void printgap()
 {
-    for (int i = 0; i < count;i++)
+    for (int i = 0; i < count; i++)
     {
         printf("=");
     }
@@ -15,8 +17,8 @@ void printgap()
 
 void printhead()
 {
-    //打印数据表头
-    printf("%13s|%20s|%16s|%23s|%8s|%8s|%8s\n", head[0], head[1], head[2], head[3], head[4], head[5], head[6]);
+    // 打印数据表头
+    printf("%12s|%20s|%14s|%23s|%7s|%7s|%7s\n", head[0], head[1], head[2], head[3], head[4], head[5], head[6]);
 }
 
 void showmenu()
@@ -47,7 +49,7 @@ void showmenu()
 
 void printstu(struct student p)
 {
-    //打印单个学生的信息
+    // 打印单个学生的信息
     printf("%10s|%20s|%4d-%2d-%2d|%20s|%5.1f|%5.1f|%5.1f\n",
            p.no, p.name, p.birthday.year, p.birthday.month, p.birthday.day, p.id, p.chinese, p.math, p.english);
 }
