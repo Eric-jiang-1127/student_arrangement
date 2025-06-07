@@ -32,5 +32,6 @@ void sortinfo();
 void displayinfo();
 
 void printstu(struct student p);
+void sync_to_db();
 
 #endif
