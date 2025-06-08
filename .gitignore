@@ -8,6 +8,7 @@ main  # 假设 main 是可执行程序名
 # 编译目录
 build/
 bin/
+venv/
 
 # 临时文件、日志
 *~
