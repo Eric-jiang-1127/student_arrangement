@@ -1,0 +1,146 @@
+{% extends "base.html" %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h4><i class="fas fa-edit"></i> 编辑学生信息</h4>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="no" class="form-label">学号</label>
+              <input
+                type="text"
+                class="form-control"
+                value="{{ student.no }}"
+                readonly
+              />
+              <small class="text-muted">学号不允许修改</small>
+            </div>
+            <div class="col-md-6">
+              <label for="name" class="form-label">姓名 *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                value="{{ student.name }}"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="year" class="form-label">出生年份 *</label>
+              <input
+                type="number"
+                class="form-control"
+                id="year"
+                name="year"
+                value="{{ student.year }}"
+                min="1900"
+                max="2100"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="month" class="form-label">出生月份 *</label>
+              <input
+                type="number"
+                class="form-control"
+                id="month"
+                name="month"
+                value="{{ student.month }}"
+                min="1"
+                max="12"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="day" class="form-label">出生日期 *</label>
+              <input
+                type="number"
+                class="form-control"
+                id="day"
+                name="day"
+                value="{{ student.day }}"
+                min="1"
+                max="31"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="id" class="form-label">身份证号 *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              name="id"
+              value="{{ student.id }}"
+              required
+            />
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="chinese" class="form-label">语文成绩 *</label>
+              <input
+                type="number"
+                step="0.1"
+                class="form-control"
+                id="chinese"
+                name="chinese"
+                value="{{ student.chinese }}"
+                min="0"
+                max="100"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="math" class="form-label">数学成绩 *</label>
+              <input
+                type="number"
+                step="0.1"
+                class="form-control"
+                id="math"
+                name="math"
+                value="{{ student.math }}"
+                min="0"
+                max="100"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="english" class="form-label">英语成绩 *</label>
+              <input
+                type="number"
+                step="0.1"
+                class="form-control"
+                id="english"
+                name="english"
+                value="{{ student.english }}"
+                min="0"
+                max="100"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+              <i class="fas fa-times"></i> 取消
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> 更新
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

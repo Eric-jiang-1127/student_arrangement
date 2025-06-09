@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><i class="fas fa-chart-bar"></i> 数据分析</h2>
+
+{% if no_data %}
+<div class="text-center mt-5">
+    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+    <h4 class="text-muted">暂无数据</h4>
+    <p class="text-muted">请先添加学生信息后再查看数据分析</p>
+    <a href="{{ url_for('add_student') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> 添加学生
+    </a>
+</div>
+{% else %}
+<!-- 统计卡片 -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center bg-primary text-white">
+            <div class="card-body">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <h4>{{ stats.total_students }}</h4>
+                <p class="mb-0">总学生数</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-success text-white">
+            <div class="card-body">
+                <i class="fas fa-book fa-2x mb-2"></i>
+                <h4>{{ stats.avg_chinese }}</h4>
+                <p class="mb-0">语文平均分</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-info text-white">
+            <div class="card-body">
+                <i class="fas fa-calculator fa-2x mb-2"></i>
+                <h4>{{ stats.avg_math }}</h4>
+                <p class="mb-0">数学平均分</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-warning text-white">
+            <div class="card-body">
+                <i class="fas fa-globe fa-2x mb-2"></i>
+                <h4>{{ stats.avg_english }}</h4>
+                <p class="mb-0">英语平均分</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 详细统计 -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-table"></i> 详细统计</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>科目</th>
+                                <th>平均分</th>
+                                <th>最高分</th>
+                                <th>最低分</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fas fa-book text-success"></i> 语文</td>
+                                <td>{{ stats.avg_chinese }}</td>
+                                <td>{{ stats.max_chinese }}</td>
+                                <td>{{ stats.min_chinese }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-calculator text-info"></i> 数学</td>
+                                <td>{{ stats.avg_math }}</td>
+                                <td>{{ stats.max_math }}</td>
+                                <td>{{ stats.min_math }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-globe text-warning"></i> 英语</td>
+                                <td>{{ stats.avg_english }}</td>
+                                <td>{{ stats.max_english }}</td>
+                                <td>{{ stats.min_english }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图表区域 -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> 各科平均分</h5>
+            </div>
+            <div class="card-body">
+                {{ avg_bar_html|safe }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie"></i> 语文成绩分布</h5>
+            </div>
+            <div class="card-body">
+                {{ score_pie_html|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> 学生成绩对比</h5>
+            </div>
+            <div class="card-body">
+                {{ line_chart_html|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
