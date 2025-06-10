@@ -24,7 +24,142 @@
 
 ## 📁 项目结构
 
-  
+```
+C语言大作业：学生管理系统 (student_arrangement)
+│
+├── 📁 项目根目录 /home/eric/C_project/stu_arr/
+│   ├── 📄 README.md                    # 项目详细说明文档
+│   ├── 📄 requirements.txt             # Python依赖包列表
+│   ├── 📄 build.sh                     # C程序自动构建脚本
+│   ├── 📄 CMakeLists.txt              # CMake构建配置文件
+│   ├── 📄 .gitignore                  # Git忽略文件配置
+│   └── 📄 LICENSE                     # 项目许可证文件
+│
+├── 📁 src/ (源代码目录)
+│   ├── 🔧 C语言核心模块
+│   │   ├── 📄 main.c                  # 主程序入口，菜单控制逻辑
+│   │   ├── 📄 showinfo.c              # 信息显示、表格输出、菜单界面
+│   │   ├── 📄 edit_stu.c              # 学生信息增删改功能实现
+│   │   ├── 📄 search.c                # 多种搜索算法实现
+│   │   ├── 📄 sort.c                  # 排序算法实现(按成绩、学号等)
+│   │   └── 📄 sqlite.c                # SQLite数据库操作接口
+│   │
+│   ├── 🌐 Python Web应用
+│   │   ├── 📄 app.py                  # Flask主应用程序
+│   │   │                              #   - 路由处理 (/, /add, /edit, /delete, /search)
+│   │   │                              #   - 数据库操作封装
+│   │   │                              #   - 多种搜索方式实现
+│   │   │                              #   - PyEcharts图表生成
+│   │   │                              #   - RESTful API接口
+│   │   └── 📄 caldata.py              # 数据分析和统计脚本
+│   │                                  #   - Pandas数据处理
+│   │                                  #   - 成绩统计分析
+│
+├── 📁 include/ (C语言头文件)
+│   └── 📄 functions.h                 # 所有函数声明和结构体定义
+│                                      #   - struct student 学生信息结构
+│                                      #   - 数据库操作函数声明
+│                                      #   - 工具函数声明
+│
+├── 📁 templates/ (Web前端模板)
+│   ├── 📄 base.html                   # 基础模板 (导航栏、样式、脚本)
+│   ├── 📄 index.html                  # 主页学生列表展示
+│   │                                  #   - 响应式表格设计
+│   │                                  #   - 多种搜索功能界面
+│   │                                  #   - 增删改查操作按钮
+│   ├── 📄 add_student.html            # 添加学生信息表单
+│   ├── 📄 edit_student.html           # 编辑学生信息表单
+│   ├── 📄 advanced_search.html        # 高级搜索多条件筛选
+│   └── 📄 analytics.html              # 数据分析可视化页面
+│                                      #   - PyEcharts交互式图表
+│                                      #   - 统计卡片展示
+│                                      #   - 成绩分布分析
+│
+├── 📁 data/ (数据存储目录)
+│   └── 📄 student.db                  # SQLite数据库文件
+│                                      #   - student表：学生基本信息和成绩
+│                                      #   - 自动创建索引优化查询
+│
+├── 📁 build/ (编译输出目录)
+│   ├── 📄 studentarrangement          # 编译后的C可执行文件
+│   ├── 📄 Makefile                    # CMake生成的构建文件
+│   └── 📁 CMakeFiles/                 # CMake缓存和临时文件
+│
+├── 📁 venv/ (Python虚拟环境)
+│   ├── 📁 bin/                        # Python解释器和脚本
+│   ├── 📁 lib/                        # 安装的Python包
+│   │   └── 📁 python3.12/site-packages/
+│   │       ├── 📦 flask/              # Web框架
+│   │       ├── 📦 pandas/             # 数据分析
+│   │       ├── 📦 pyecharts/          # 图表库
+│   │       └── 📦 sqlite3/            # 数据库接口
+│   └── 📄 pyvenv.cfg                  # 虚拟环境配置
+│
+└── 📁 docs/ (文档目录) [可选扩展]
+    ├── 📄 API文档.md                  # RESTful API接口说明
+    ├── 📄 数据库设计.md               # 数据库表结构设计
+    ├── 📄 开发指南.md                 # 开发环境搭建指南
+    └── 📁 screenshots/                # 项目截图展示
+        ├── 🖼️ 主界面.png
+        ├── 🖼️ 搜索功能.png
+        └── 🖼️ 数据分析.png
+
+═══════════════════════════════════════════════════════════════
+
+📊 技术架构说明：
+
+🔧 后端技术栈：
+├── C语言 + GCC编译器        → 核心业务逻辑
+├── SQLite3 数据库          → 数据持久化存储  
+├── CMake 构建系统          → 跨平台编译管理
+└── Shell脚本自动化         → 一键构建部署
+
+🌐 前端技术栈：
+├── Python Flask Web框架    → HTTP服务和路由
+├── Jinja2 模板引擎         → 动态HTML生成
+├── Bootstrap 5 UI框架      → 响应式界面设计
+├── Font Awesome 图标库     → 美观图标支持
+└── JavaScript + jQuery     → 前端交互逻辑
+
+📈 数据处理：
+├── Pandas 数据分析库       → 数据清洗和统计
+├── PyEcharts 可视化库      → 交互式图表生成
+├── SQLite Python驱动      → 数据库连接操作
+└── JSON数据交换格式        → API接口数据传输
+
+═══════════════════════════════════════════════════════════════
+
+🚀 核心功能模块：
+
+📋 C语言核心功能：
+├── 🔍 多种搜索方式 (按姓名、学号、成绩、身份证等)
+├── 📊 多字段排序 (升序/降序，单科/总分/平均分)
+├── ✏️ 完整CRUD操作 (增加、删除、修改、查看)
+├── 💾 SQLite数据持久化 (事务处理、数据一致性)
+└── 🖥️ 命令行交互界面 (菜单导航、错误处理)
+
+🌐 Python Web功能：
+├── 🎨 现代化Web界面 (响应式设计、移动端适配)
+├── 🔍 智能搜索系统 (实时搜索、高级筛选)
+├── 📊 数据可视化 (柱状图、饼图、折线图)
+├── 📈 统计分析功能 (成绩分布、排名统计)
+├── 🔌 RESTful API (JSON数据接口)
+└── 🛡️ 数据验证保护 (表单验证、SQL注入防护)
+
+═══════════════════════════════════════════════════════════════
+
+📁 文件大小统计 (预估)：
+├── 源代码文件：~50KB
+├── 数据库文件：~1-10MB (取决于学生数量)
+├── Python虚拟环境：~100MB
+├── 编译产物：~500KB
+└── 项目文档：~5MB
+
+🔗 外部依赖：
+├── 系统依赖：GCC, CMake, Python3, SQLite3
+├── Python包：Flask, Pandas, PyEcharts
+└── 前端库：Bootstrap, Font Awesome (CDN)
+```  
   
 
 ## 🛠️ 技术栈
