@@ -8,27 +8,85 @@
 
 <!-- 搜索框 -->
 <div class="row mb-3">
-  <div class="col-md-6">
-    <form method="GET" action="{{ url_for('search') }}">
-      <div class="input-group">
-        <select class="form-select" name="type" style="max-width: 120px">
-          <option value="name">姓名</option>
-          <option value="no">学号</option>
-        </select>
-        <input
-          type="text"
-          class="form-control"
-          name="query"
-          placeholder="输入搜索内容"
-          value="{{ search_query or '' }}"
-        />
-        <button class="btn btn-outline-primary" type="submit">
-          <i class="fas fa-search"></i> 搜索
-        </button>
-      </div>
-    </form>
-  </div>
+    <div class="col-md-8">
+        <form method="GET" action="{{ url_for('search') }}">
+            <div class="input-group">
+                <select class="form-select" name="type" style="max-width: 150px;" id="searchType">
+                    <option value="name" {{ 'selected' if search_type == 'name' else '' }}>姓名</option>
+                    <option value="no" {{ 'selected' if search_type == 'no' else '' }}>学号</option>
+                    <option value="id" {{ 'selected' if search_type == 'id' else '' }}>身份证</option>
+                    <option value="chinese" {{ 'selected' if search_type == 'chinese' else '' }}>语文成绩</option>
+                    <option value="math" {{ 'selected' if search_type == 'math' else '' }}>数学成绩</option>
+                    <option value="english" {{ 'selected' if search_type == 'english' else '' }}>英语成绩</option>
+                    <option value="total" {{ 'selected' if search_type == 'total' else '' }}>总分</option>
+                    <option value="average" {{ 'selected' if search_type == 'average' else '' }}>平均分</option>
+                    <option value="year" {{ 'selected' if search_type == 'year' else '' }}>出生年份</option>
+                </select>
+                <input type="text" class="form-control" name="query" placeholder="输入搜索内容" 
+                       value="{{ search_query or '' }}" id="searchInput">
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-refresh"></i> 重置
+                </a>
+            </div>
+            <small class="text-muted mt-1 d-block" id="searchHint">
+                提示：搜索姓名支持模糊匹配
+            </small>
+        </form>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('advanced_search') }}" class="btn btn-info">
+            <i class="fas fa-filter"></i> 高级搜索
+        </a>
+    </div>
 </div>
+
+<script>
+// 动态更新搜索提示
+document.getElementById('searchType').addEventListener('change', function() {
+    const searchType = this.value;
+    const searchInput = document.getElementById('searchInput');
+    const searchHint = document.getElementById('searchHint');
+    
+    switch(searchType) {
+        case 'name':
+            searchInput.placeholder = '输入学生姓名';
+            searchHint.textContent = '提示：支持模糊匹配，如输入"李"可搜索所有姓李的学生';
+            break;
+        case 'no':
+            searchInput.placeholder = '输入学号';
+            searchHint.textContent = '提示：支持模糊匹配，如输入"2025"可搜索所有2025年入学的学生';
+            break;
+        case 'id':
+            searchInput.placeholder = '输入身份证号';
+            searchHint.textContent = '提示：支持模糊匹配';
+            break;
+        case 'chinese':
+        case 'math':
+        case 'english':
+            searchInput.placeholder = '输入成绩，如：90 或 >=80 或 <60';
+            searchHint.textContent = '提示：支持 =90, >=80, <=60, >70, <50 等格式';
+            break;
+        case 'total':
+            searchInput.placeholder = '输入总分，如：270 或 >=240';
+            searchHint.textContent = '提示：三科总分，支持 =270, >=240, <=180 等格式';
+            break;
+        case 'average':
+            searchInput.placeholder = '输入平均分，如：90 或 >=80';
+            searchHint.textContent = '提示：三科平均分，支持 =90, >=80, <=60 等格式';
+            break;
+        case 'year':
+            searchInput.placeholder = '输入出生年份，如：2005';
+            searchHint.textContent = '提示：输入四位数年份';
+            break;
+        default:
+            searchInput.placeholder = '输入搜索内容';
+            searchHint.textContent = '提示：请选择搜索类型';
+    }
+});
+</script>
 
 <!-- 学生列表 -->
 {% if students %}

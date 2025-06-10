@@ -1,0 +1,157 @@
+{% extends "base.html" %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-header">
+        <h4><i class="fas fa-filter"></i> 高级搜索</h4>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label">姓名</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="支持模糊匹配"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="no" class="form-label">学号</label>
+              <input
+                type="text"
+                class="form-control"
+                id="no"
+                name="no"
+                placeholder="支持模糊匹配"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">语文成绩范围</label>
+              <div class="row">
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="chinese_min"
+                    placeholder="最低分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="chinese_max"
+                    placeholder="最高分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">数学成绩范围</label>
+              <div class="row">
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="math_min"
+                    placeholder="最低分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="math_max"
+                    placeholder="最高分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">英语成绩范围</label>
+              <div class="row">
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="english_min"
+                    placeholder="最低分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+                <div class="col-6">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="english_max"
+                    placeholder="最高分"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="year" class="form-label">出生年份</label>
+              <input
+                type="number"
+                class="form-control"
+                id="year"
+                name="year"
+                placeholder="如：2005"
+                min="1900"
+                max="2100"
+              />
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+              <i class="fas fa-times"></i> 取消
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-search"></i> 搜索
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <div class="alert alert-info">
+        <h6><i class="fas fa-info-circle"></i> 搜索说明：</h6>
+        <ul class="mb-0">
+          <li>姓名和学号支持模糊匹配</li>
+          <li>成绩范围：只填最低分表示"大于等于"，只填最高分表示"小于等于"</li>
+          <li>多个条件同时满足才会显示结果（AND逻辑）</li>
+          <li>不填写的条件将被忽略</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

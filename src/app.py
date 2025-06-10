@@ -1,18 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 import sqlite3
 import pandas as pd
-import matplotlib.pyplot as plt
-import io
-import base64
 import json
 import os
-
-app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # 用于 flash 消息
+from pyecharts import options as opts
+from pyecharts.charts import Bar, Pie, Line
+from pyecharts.globals import ThemeType
 
 # 获取项目根目录
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# 初始化 Flask 应用（只初始化一次）
 app = Flask(__name__, template_folder=os.path.join(project_root, 'templates'))
 app.secret_key = 'your_secret_key_here'
 
@@ -128,33 +126,298 @@ def delete_student(student_no):
 
 @app.route('/search')
 def search():
-    """搜索学生"""
+    """搜索学生 - 支持多种搜索方式"""
     query = request.args.get('query', '')
     search_type = request.args.get('type', 'name')
     
     conn = get_db_connection()
+    students = []
     
-    if search_type == 'name':
-        students = conn.execute('SELECT * FROM student WHERE name LIKE ?', 
-                               (f'%{query}%',)).fetchall()
-    elif search_type == 'no':
-        students = conn.execute('SELECT * FROM student WHERE no LIKE ?', 
-                               (f'%{query}%',)).fetchall()
+    try:
+        if search_type == 'name':
+            # 按姓名搜索（模糊匹配）
+            students = conn.execute('SELECT * FROM student WHERE name LIKE ?', 
+                                   (f'%{query}%',)).fetchall()
+        
+        elif search_type == 'no':
+            # 按学号搜索（精确匹配或模糊匹配）
+            students = conn.execute('SELECT * FROM student WHERE no LIKE ?', 
+                                   (f'%{query}%',)).fetchall()
+        
+        elif search_type == 'id':
+            # 按身份证号搜索（模糊匹配）
+            students = conn.execute('SELECT * FROM student WHERE id LIKE ?', 
+                                   (f'%{query}%',)).fetchall()
+        
+        elif search_type == 'chinese':
+            # 按语文成绩搜索
+            if query:
+                # 支持范围搜索，例如：>=80, <=60, =90
+                if query.startswith('>='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE chinese >= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE chinese <= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('>'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE chinese > ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE chinese < ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('='):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE chinese = ?', 
+                                           (score,)).fetchall()
+                else:
+                    # 精确匹配
+                    score = float(query)
+                    students = conn.execute('SELECT * FROM student WHERE chinese = ?', 
+                                           (score,)).fetchall()
+        
+        elif search_type == 'math':
+            # 按数学成绩搜索
+            if query:
+                if query.startswith('>='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE math >= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE math <= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('>'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE math > ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE math < ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('='):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE math = ?', 
+                                           (score,)).fetchall()
+                else:
+                    score = float(query)
+                    students = conn.execute('SELECT * FROM student WHERE math = ?', 
+                                           (score,)).fetchall()
+        
+        elif search_type == 'english':
+            # 按英语成绩搜索
+            if query:
+                if query.startswith('>='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE english >= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE english <= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('>'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE english > ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE english < ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('='):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE english = ?', 
+                                           (score,)).fetchall()
+                else:
+                    score = float(query)
+                    students = conn.execute('SELECT * FROM student WHERE english = ?', 
+                                           (score,)).fetchall()
+        
+        elif search_type == 'total':
+            # 按总分搜索
+            if query:
+                if query.startswith('>='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) >= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) <= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('>'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) > ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) < ?', 
+                                           (score,)).fetchall()
+                else:
+                    score = float(query)
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) = ?', 
+                                           (score,)).fetchall()
+        
+        elif search_type == 'average':
+            # 按平均分搜索
+            if query:
+                if query.startswith('>='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) / 3.0 >= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<='):
+                    score = float(query[2:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) / 3.0 <= ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('>'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) / 3.0 > ?', 
+                                           (score,)).fetchall()
+                elif query.startswith('<'):
+                    score = float(query[1:])
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) / 3.0 < ?', 
+                                           (score,)).fetchall()
+                else:
+                    score = float(query)
+                    students = conn.execute('SELECT * FROM student WHERE (chinese + math + english) / 3.0 = ?', 
+                                           (score,)).fetchall()
+        
+        elif search_type == 'year':
+            # 按出生年份搜索
+            if query:
+                year = int(query)
+                students = conn.execute('SELECT * FROM student WHERE year = ?', 
+                                       (year,)).fetchall()
+        
+        else:
+            # 默认显示所有学生
+            students = conn.execute('SELECT * FROM student ORDER BY no').fetchall()
+    
+    except (ValueError, TypeError):
+        # 处理无效的搜索参数
+        flash('搜索参数格式错误，请检查输入！', 'error')
+        students = conn.execute('SELECT * FROM student ORDER BY no').fetchall()
+    
+    finally:
+        conn.close()
+    
+    return render_template('index.html', students=students, search_query=query, search_type=search_type)
+
+@app.route('/advanced_search', methods=['GET', 'POST'])
+def advanced_search():
+    """高级搜索页面"""
+    if request.method == 'POST':
+        # 获取表单数据
+        name = request.form.get('name', '').strip()
+        no = request.form.get('no', '').strip()
+        chinese_min = request.form.get('chinese_min', '')
+        chinese_max = request.form.get('chinese_max', '')
+        math_min = request.form.get('math_min', '')
+        math_max = request.form.get('math_max', '')
+        english_min = request.form.get('english_min', '')
+        english_max = request.form.get('english_max', '')
+        year = request.form.get('year', '')
+        
+        # 构建SQL查询
+        conditions = []
+        params = []
+        
+        if name:
+            conditions.append("name LIKE ?")
+            params.append(f"%{name}%")
+        
+        if no:
+            conditions.append("no LIKE ?")
+            params.append(f"%{no}%")
+        
+        if chinese_min:
+            conditions.append("chinese >= ?")
+            params.append(float(chinese_min))
+        
+        if chinese_max:
+            conditions.append("chinese <= ?")
+            params.append(float(chinese_max))
+        
+        if math_min:
+            conditions.append("math >= ?")
+            params.append(float(math_min))
+        
+        if math_max:
+            conditions.append("math <= ?")
+            params.append(float(math_max))
+        
+        if english_min:
+            conditions.append("english >= ?")
+            params.append(float(english_min))
+        
+        if english_max:
+            conditions.append("english <= ?")
+            params.append(float(english_max))
+        
+        if year:
+            conditions.append("year = ?")
+            params.append(int(year))
+        
+        # 执行查询
+        conn = get_db_connection()
+        if conditions:
+            sql = f"SELECT * FROM student WHERE {' AND '.join(conditions)} ORDER BY no"
+            students = conn.execute(sql, params).fetchall()
+        else:
+            students = conn.execute('SELECT * FROM student ORDER BY no').fetchall()
+        
+        conn.close()
+        
+        return render_template('index.html', students=students, is_search_result=True)
+    
+    return render_template('advanced_search.html')
+
+@app.route('/api/search_stats')
+def search_stats():
+    """搜索统计API"""
+    search_type = request.args.get('type', 'all')
+    
+    conn = get_db_connection()
+    
+    if search_type == 'score_distribution':
+        # 成绩分布统计
+        stats = {
+            'chinese': {
+                'excellent': conn.execute('SELECT COUNT(*) FROM student WHERE chinese >= 90').fetchone()[0],
+                'good': conn.execute('SELECT COUNT(*) FROM student WHERE chinese >= 80 AND chinese < 90').fetchone()[0],
+                'fair': conn.execute('SELECT COUNT(*) FROM student WHERE chinese >= 70 AND chinese < 80').fetchone()[0],
+                'pass': conn.execute('SELECT COUNT(*) FROM student WHERE chinese >= 60 AND chinese < 70').fetchone()[0],
+                'fail': conn.execute('SELECT COUNT(*) FROM student WHERE chinese < 60').fetchone()[0]
+            },
+            'math': {
+                'excellent': conn.execute('SELECT COUNT(*) FROM student WHERE math >= 90').fetchone()[0],
+                'good': conn.execute('SELECT COUNT(*) FROM student WHERE math >= 80 AND math < 90').fetchone()[0],
+                'fair': conn.execute('SELECT COUNT(*) FROM student WHERE math >= 70 AND math < 80').fetchone()[0],
+                'pass': conn.execute('SELECT COUNT(*) FROM student WHERE math >= 60 AND math < 70').fetchone()[0],
+                'fail': conn.execute('SELECT COUNT(*) FROM student WHERE math < 60').fetchone()[0]
+            },
+            'english': {
+                'excellent': conn.execute('SELECT COUNT(*) FROM student WHERE english >= 90').fetchone()[0],
+                'good': conn.execute('SELECT COUNT(*) FROM student WHERE english >= 80 AND english < 90').fetchone()[0],
+                'fair': conn.execute('SELECT COUNT(*) FROM student WHERE english >= 70 AND english < 80').fetchone()[0],
+                'pass': conn.execute('SELECT COUNT(*) FROM student WHERE english >= 60 AND english < 70').fetchone()[0],
+                'fail': conn.execute('SELECT COUNT(*) FROM student WHERE english < 60').fetchone()[0]
+            }
+        }
     else:
-        students = conn.execute('SELECT * FROM student').fetchall()
+        # 基础统计
+        stats = {
+            'total_students': conn.execute('SELECT COUNT(*) FROM student').fetchone()[0],
+            'avg_scores': {
+                'chinese': conn.execute('SELECT AVG(chinese) FROM student').fetchone()[0],
+                'math': conn.execute('SELECT AVG(math) FROM student').fetchone()[0],
+                'english': conn.execute('SELECT AVG(english) FROM student').fetchone()[0]
+            }
+        }
     
     conn.close()
-    return render_template('index.html', students=students, search_query=query)
-
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
-import sqlite3
-import pandas as pd
-import json
-import os
-from pyecharts import options as opts
-from pyecharts.charts import Bar, Pie, Line
-from pyecharts.globals import ThemeType
-
+    return jsonify(stats)
 
 @app.route('/analytics')
 def analytics():
